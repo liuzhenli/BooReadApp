@@ -58,6 +58,8 @@ public class AboutActivity extends BaseActivity {
     @BindView(R.id.tv_new_version_info)
     TextView mTvNewVersionInfo;
 
+    @BindView(R.id.tv_donate_title)
+    TextView mTvDonateTitle;
     @BindView(R.id.tv_about_donate)
     TextView mTvAbout;
 
@@ -185,6 +187,18 @@ public class AboutActivity extends BaseActivity {
             startActivity(intent);
         });
 
+        configDonate(AppConfigManager.getInstance().isShowDonate());
+    }
+
+    private void configDonate(boolean showDonate) {
+        if (!showDonate) {
+            mTvDonateTitle.setVisibility(View.GONE);
+            mTvAbout.setVisibility(View.GONE);
+            mViewDonateAliPay.setVisibility(View.GONE);
+            mViewQQ.setVisibility(View.GONE);
+            mViewWX.setVisibility(View.GONE);
+            mViewZFB.setVisibility(View.GONE);
+        }
     }
 
     private void configQQGroup() {

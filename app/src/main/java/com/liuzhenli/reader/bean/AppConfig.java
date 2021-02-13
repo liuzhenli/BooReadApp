@@ -13,6 +13,7 @@ public class AppConfig extends BaseBean {
     public Config data;
 
     public static class Config {
+
         public String sourceUrl;
         /**
          * code : 1
@@ -20,11 +21,21 @@ public class AppConfig extends BaseBean {
          * intro : 有新版本
          */
         public LatestVersion versionInfo;
+        public DonateInfo pay;
+        public AdInfo ad;
+    }
 
-        public static class LatestVersion {
-            public int code;
-            public String url;
-            public String intro;
-        }
+    public static class LatestVersion {
+        public int code;
+        public String url;
+        public String intro;
+    }
+
+    public static class DonateInfo {
+        public String filterChannel;
+    }
+
+    public static class AdInfo {
+        public String filterChannel;
     }
 }

@@ -3,7 +3,9 @@ package com.liuzhenli.reader.utils;
 import android.text.TextUtils;
 
 import com.liuzhenli.common.BaseApplication;
+import com.liuzhenli.common.utils.ChannelUtil;
 import com.liuzhenli.common.utils.IOUtils;
+import com.liuzhenli.reader.ReaderApplication;
 import com.liuzhenli.reader.bean.AppConfig;
 import com.liuzhenli.reader.bean.Sayings;
 import com.liuzhenli.reader.gson.GsonUtils;
@@ -55,6 +57,21 @@ public class AppConfigManager {
             }
         }
         return "";
+    }
+
+    public boolean isShowDonate() {
+        if (getAppConfig() != null) {
+            if (getAppConfig().data != null && getAppConfig().data.pay != null
+                    && !TextUtils.isEmpty(getAppConfig().data.pay.filterChannel)) {
+                String[] split = getAppConfig().data.pay.filterChannel.split(",");
+                for (String s : split) {
+                    if (s.equals(ChannelUtil.getChannelName(BaseApplication.getInstance()))) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     public Sayings getSayings() {

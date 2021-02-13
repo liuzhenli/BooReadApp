@@ -107,6 +107,7 @@
                 android:textSize="@dimen/txt_size_12" />
 
             <TextView
+                android:id="@+id/tv_donate_title"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height_30"
                 android:background="@color/bg_color"
