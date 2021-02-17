@@ -270,10 +270,12 @@ public class MainActivity extends BaseActivity {
             if (fragment.isShowBookSourceMenu()) {
                 fragment.dismissBookSourceMenu();
             } else {
-                super.onBackPressed();
+                moveTaskToBack(true);
+                //super.onBackPressed();
             }
         } else {
-            super.onBackPressed();
+            moveTaskToBack(true);
+            //super.onBackPressed();
         }
 
 
