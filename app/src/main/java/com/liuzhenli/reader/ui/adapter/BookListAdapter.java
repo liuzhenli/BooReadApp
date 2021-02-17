@@ -76,7 +76,7 @@ public class BookListAdapter extends RecyclerArrayAdapter<SearchBookBean> {
             } else {
                 mTvAuthor.setText(String.format("%s", getAuthor(item)));
             }
-            ImageUtil.setImage(mContext, item.getCoverUrl(), R.drawable.book_cover, mIvCover);
+            ImageUtil.setRoundedCornerImage(mContext, item.getCoverUrl(), R.drawable.ic_book_cover_placeholder, R.drawable.book_cover, mIvCover, 4);
         }
 
         private String getAuthor(SearchBookBean item) {

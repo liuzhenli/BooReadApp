@@ -73,7 +73,7 @@ public class BookShelfAdapter extends RecyclerArrayAdapter<BookShelfBean> {
             mTvRead.setText(String.format("读至:%s", item.getDurChapterName() == null ? "章节名未知" : item.getDurChapterName()));
             mTvLast.setText(String.format("最新:%s", item.getLastChapterName() == null ? "章节名未知" : item.getLastChapterName()));
             if (item.getBookInfoBean() != null) {
-                ImageUtil.setImage(mContext, item.getBookInfoBean().getCoverUrl(), R.drawable.book_cover, mIvCover);
+                ImageUtil.setImage(mContext, item.getBookInfoBean().getCoverUrl(), R.drawable.ic_book_cover_placeholder, R.drawable.book_cover, mIvCover);
             }
             if (item.isLoading()) {
                 mBvUnread.setVisibility(View.GONE);

@@ -200,7 +200,7 @@ public class BookShelfFragment extends BaseRVFragment<BookShelfPresenter, BookSh
         } else {
             mVAllowUpdate.setVisibility(View.VISIBLE);
         }
-        ImageUtil.setImage(mContext, bookShelfBean.getBookInfoBean().getCoverUrl(), R.drawable.book_cover, mIvCover);
+        ImageUtil.setImage(mContext, bookShelfBean.getBookInfoBean().getCoverUrl(), R.drawable.ic_book_cover_placeholder, R.drawable.book_cover, mIvCover);
         String author = TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getAuthor()) ? "未知" : bookShelfBean.getBookInfoBean().getAuthor();
         mVAllowUpdate.setChecked(bookShelfBean.getAllowUpdate());
         tvBookName.setText(bookShelfBean.getBookInfoBean().getName());

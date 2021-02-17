@@ -100,6 +100,14 @@ public class ImageUtil {
 
     /**
      * Glide 加载图片
+     * placeHolderResId 加载失败填充图资源id
+     */
+    public static void setImage(Context cxt, String imgUrl, int placeHolderResId, int errorResId, ImageView imageView) {
+        Glide.with(cxt).load(imgUrl).placeholder(placeHolderResId).error(errorResId).into(imageView);
+    }
+
+    /**
+     * Glide 加载图片
      */
     public static void setRoundImage(Context cxt, String imgUrl, ImageView imageView) {
         Glide.with(cxt).load(imgUrl).transform(new GlideCircleTransform()).into(imageView);
@@ -129,6 +137,10 @@ public class ImageUtil {
      */
     public static void setRoundedCornerImage(Context cxt, String imgUrl, int placeHolderResId, ImageView imageView, int radius) {
         Glide.with(cxt).load(imgUrl).placeholder(placeHolderResId).transform(new GlideRoundTransform(radius)).into(imageView);
+    }
+
+    public static void setRoundedCornerImage(Context cxt, String imgUrl, int placeHolderResId, int errorResId, ImageView imageView, int radius) {
+        Glide.with(cxt).load(imgUrl).placeholder(placeHolderResId).error(errorResId).transform(new GlideRoundTransform(radius)).into(imageView);
     }
 
     /**
@@ -513,6 +525,7 @@ public class ImageUtil {
     public static void clearMemoryCache(Context context) {
         Glide.get(context).clearMemory();
     }
+
     /**
      * 清除磁盘缓存 必须在子线程
      *
