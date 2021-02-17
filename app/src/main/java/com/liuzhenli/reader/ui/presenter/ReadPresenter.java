@@ -10,9 +10,11 @@ import com.liuzhenli.reader.network.Api;
 import com.liuzhenli.reader.observer.SampleProgressObserver;
 import com.liuzhenli.reader.ui.contract.ReadContract;
 import com.liuzhenli.reader.utils.ThreadUtils;
+import com.liuzhenli.reader.utils.ToastUtil;
 import com.micoredu.readerlib.bean.BookChapterBean;
 import com.micoredu.readerlib.bean.BookShelfBean;
 import com.micoredu.readerlib.helper.BookshelfHelper;
+import com.micoredu.readerlib.helper.ChangeSourceHelper;
 import com.micoredu.readerlib.helper.DbHelper;
 import com.micoredu.readerlib.helper.DocumentHelper;
 
@@ -38,6 +40,7 @@ public class ReadPresenter extends RxPresenter<ReadContract.View> implements Rea
 
     private Api mApi;
     private List<BookChapterBean> chapterList = new ArrayList<>();
+    private ChangeSourceHelper changeSourceHelp;
 
     @Inject
     public ReadPresenter(Api api) {
@@ -94,6 +97,33 @@ public class ReadPresenter extends RxPresenter<ReadContract.View> implements Rea
         }
     }
 
+    @Override
+    public void changeBookSource() {
+        if (changeSourceHelp == null) {
+            changeSourceHelp = new ChangeSourceHelper();
+        }
+        changeSourceHelp.autoChange(mView.getBookShelf(), new ChangeSourceHelper.ChangeSourceListener() {
+
+            @Override
+            public void finish(BookShelfBean bookShelfBean, List<BookChapterBean> chapterBeanList) {
+                if (!chapterBeanList.isEmpty()) {
+                    RxBus.get().post(RxBusTag.HAD_REMOVE_BOOK, mView.getBookShelf());
+                    RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelfBean);
+                    chapterList = chapterBeanList;
+                    mView.showChangeBookSourceResult(bookShelfBean);
+                } else {
+                    mView.showChangeBookSourceResult(null);
+                }
+            }
+
+            @Override
+            public void error(Throwable throwable) {
+                ToastUtil.showToast(throwable.getMessage());
+                mView.showChangeBookSourceResult(null);
+            }
+        });
+    }
+
     public void setChapterList(List<BookChapterBean> chapters) {
         this.chapterList = chapters;
         if (chapterList != null && chapterList.size() > 0) {
@@ -105,4 +135,11 @@ public class ReadPresenter extends RxPresenter<ReadContract.View> implements Rea
         return chapterList;
     }
 
+    @Override
+    public void detachView() {
+        super.detachView();
+        if (changeSourceHelp!=null) {
+            changeSourceHelp.stopSearch();
+        }
+    }
 }

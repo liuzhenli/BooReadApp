@@ -51,6 +51,7 @@ import com.micoredu.readerlib.bean.ReplaceRuleBean;
 import com.micoredu.readerlib.helper.BookshelfHelper;
 import com.micoredu.readerlib.helper.ReadConfigManager;
 import com.micoredu.readerlib.model.ReplaceRuleManager;
+import com.micoredu.readerlib.page.PageLoaderNet;
 import com.micoredu.readerlib.page.PageView;
 import com.micoredu.readerlib.bean.BookChapterBean;
 import com.micoredu.readerlib.page.PageLoader;
@@ -531,7 +532,7 @@ public class ReaderActivity extends BaseReaderActivity implements ReadContract.V
 
     @Override
     public void autoChangeSource() {
-
+        mPresenter.changeBookSource();
     }
 
     /***
@@ -563,7 +564,7 @@ public class ReaderActivity extends BaseReaderActivity implements ReadContract.V
 
     @Override
     public void showBookInfo(BookShelfBean bookInfo) {
-
+        this.mBookShelf = bookInfo;
     }
 
     @Override
@@ -602,6 +603,14 @@ public class ReaderActivity extends BaseReaderActivity implements ReadContract.V
     @Override
     public BookShelfBean getBookShelf() {
         return this.mBookShelf;
+    }
+
+    @Override
+    public void showChangeBookSourceResult(BookShelfBean book) {
+        this.mBookShelf = book;
+        if (mPageLoader != null && mPageLoader instanceof PageLoaderNet) {
+            ((PageLoaderNet) mPageLoader).changeSourceFinish(book);
+        }
     }
 
     @Override

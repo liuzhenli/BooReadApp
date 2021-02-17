@@ -32,6 +32,8 @@ public class ReadContract {
 
         BookShelfBean getBookShelf();
 
+        void showChangeBookSourceResult(BookShelfBean book);
+
     }
 
 
@@ -42,6 +44,8 @@ public class ReadContract {
         void saveProgress(BookShelfBean bookShelf);
 
         void getFontFile();
+
+        void changeBookSource();
     }
 
 
