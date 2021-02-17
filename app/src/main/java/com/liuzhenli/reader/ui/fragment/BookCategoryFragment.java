@@ -2,6 +2,7 @@ package com.liuzhenli.reader.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.liuzhenli.common.BitIntentDataManager;
 import com.liuzhenli.common.constant.AppConstant;
@@ -124,12 +125,12 @@ public class BookCategoryFragment extends BaseRVFragment<BookListPresenter, Sear
             DataDiffUtil.diffResult(mAdapter, data, new DataDiffUtil.ItemSameCallBack<SearchBookBean>() {
                 @Override
                 public boolean isItemSame(SearchBookBean oldItem, SearchBookBean newItem) {
-                    return oldItem != null && newItem != null && oldItem.getName().equals(newItem.getName());
+                    return oldItem != null && newItem != null && TextUtils.equals(oldItem.getName(), newItem.getName());
                 }
 
                 @Override
                 public boolean isContentSame(SearchBookBean oldItem, SearchBookBean newItem) {
-                    return oldItem.getCoverUrl().equals(newItem.getCoverUrl());
+                    return TextUtils.equals(oldItem.getCoverUrl(), newItem.getCoverUrl());
                 }
             });
         } else {
