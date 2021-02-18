@@ -84,6 +84,9 @@
         <activity android:name="com.liuzhenli.reader.ui.activity.WriteBookActivity" />
         <activity android:name="com.liuzhenli.reader.ui.activity.BookChapterListActivity" />
         <activity android:name="com.liuzhenli.reader.ui.activity.DownloadActivity" />
+        <activity android:name="com.liuzhenli.reader.ui.activity.DatabaseTableListActivity" />
+        <activity android:name="com.liuzhenli.reader.ui.activity.DatabaseTableRecordDetailActivity" />
+        <activity android:name="com.liuzhenli.reader.ui.activity.DatabaseTableRecordsActivity" />
 
         <service android:name="com.liuzhenli.reader.service.CheckSourceService" />
         <service android:name="com.micoredu.readerlib.service.ReadAloudService" />

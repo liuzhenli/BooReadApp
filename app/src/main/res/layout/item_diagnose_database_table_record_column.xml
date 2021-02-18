@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_diagnose_databse_table_colum_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|center_vertical"
+        android:padding="8dip"
+        android:text="user_name"
+        android:textColor="@color/text_color_66"
+        android:textSize="@dimen/txt_size_16"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_diagnose_databse_table_column_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|center_vertical"
+        android:padding="8dip"
+        android:text="http://blog.csdn.net/justfornn413/article/details/5348203"
+        android:textColor="@color/text_color_66"
+        android:textSize="@dimen/txt_size_14" />
+
+</LinearLayout>

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.liuzhenli.common.FileHelp;
 import com.liuzhenli.common.utils.ClickUtils;
 import com.liuzhenli.common.utils.FileUtils;
+import com.liuzhenli.reader.ReaderApplication;
 import com.liuzhenli.reader.base.BaseActivity;
 import com.liuzhenli.reader.network.AppComponent;
 import com.liuzhenli.reader.ui.contract.SettingContract;
@@ -38,6 +39,8 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
     View mViewBackUp;
     @BindView(R.id.tv_setting_clear_cache_size)
     TextView mTvCacheSize;
+    @BindView(R.id.view_app_database)
+    View mViewAppDatabase;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, SettingActivity.class);
@@ -83,6 +86,12 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
         ClickUtils.click(mVFilePath, o -> {
             FilePathsListActivity.start(mContext);
         });
+        ClickUtils.click(mViewAppDatabase, o -> {
+            DatabaseTableListActivity.start(mContext);
+        });
+        if (ReaderApplication.isDebug) {
+            mViewAppDatabase.setVisibility(View.VISIBLE);
+        }
         mPresenter.getCacheSize();
     }
 

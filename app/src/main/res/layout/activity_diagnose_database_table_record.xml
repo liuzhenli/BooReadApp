@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_common_toolbar" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dip"
+        android:padding="0dip">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <GridView
+                android:id="@+id/gird_diagnose_database_table_data"
+                android:layout_width="800dip"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="0dip"
+                android:cacheColorHint="@android:color/transparent"
+                android:horizontalSpacing="0dp"
+                android:listSelector="@android:color/transparent"
+                android:padding="0dip"
+                android:scrollbarStyle="insideOverlay"
+                android:scrollbars="horizontal|vertical"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="0dp" />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+</LinearLayout>

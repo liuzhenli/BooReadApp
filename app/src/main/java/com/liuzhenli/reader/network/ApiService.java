@@ -20,7 +20,7 @@ import retrofit2.http.Query;
  */
 public interface ApiService {
     @FormUrlEncoded
-    @POST("https://i.itangyuan.com/login/phone.json")
+    @POST("https://microedu.com/login/phone.json")
     Observable<BaseBean> getLoginData(@FieldMap Map<String, String> body);
 
     @Headers({"url_name:" + ApiManager.apiName.BOOK_SOURCE})
