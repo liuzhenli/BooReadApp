@@ -23,9 +23,9 @@ public class BookListContract {
         /**
          * 获取书列表
          *
-         * @param url
-         * @param page
-         * @param tag
+         * @param url  url
+         * @param page page
+         * @param tag  tag
          */
         void getBookList(String url, int page, String tag);
     }
