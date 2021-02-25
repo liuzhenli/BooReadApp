@@ -6,6 +6,7 @@ import com.liuzhenli.reader.module.AppModule;
 import com.liuzhenli.reader.ui.activity.ChangeSourceActivity;
 import com.liuzhenli.reader.ui.activity.BookDetailActivity;
 import com.liuzhenli.reader.ui.activity.BookSourceActivity;
+import com.liuzhenli.reader.ui.activity.DatabaseTableListActivity;
 import com.liuzhenli.reader.ui.activity.DownloadActivity;
 import com.liuzhenli.reader.ui.activity.EditSourceActivity;
 import com.liuzhenli.reader.ui.activity.ImportLocalBookActivity;
@@ -65,4 +66,7 @@ public interface AppComponent {
     void inject(SettingActivity settingActivity);
 
     void inject(DownloadActivity downloadActivity);
+
+    void inject(DatabaseTableListActivity databaseTableListActivity);
+
 }
