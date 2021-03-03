@@ -7,7 +7,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <com.qmuiteam.qmui.widget.QMUIRadiusImageView2
             android:id="@+id/iv_book_cover"
@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/common_space_normal"
             android:layout_marginRight="@dimen/common_space_normal"
+            android:drawableEnd="@drawable/icon_common_arrow_right_more"
             android:ellipsize="end"
             android:maxLines="2"
             android:text="@string/book_name"
@@ -87,6 +88,7 @@
                     android:id="@+id/cb_allow_update"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/common_space_normal"
                     android:text="@string/allow_update"
                     android:textColor="@color/s_book_tag"
                     android:textSize="@dimen/txt_size_12" />
@@ -94,7 +96,6 @@
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/common_space_large"
                     android:button="@null"
                     android:text="追更"
                     android:textColor="@color/s_book_tag"
@@ -103,7 +104,7 @@
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/common_space_normal"
+                    android:layout_marginStart="@dimen/common_space_normal"
                     android:button="@null"
                     android:text="养肥"
                     android:textColor="@color/s_book_tag"
@@ -134,7 +135,9 @@
             android:id="@+id/tv_book_des"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:lineSpacingMultiplier="1.3"
+            android:maxLines="5"
             android:padding="@dimen/common_space_normal"
             android:textColor="@color/text_color_66"
             app:layout_constraintLeft_toLeftOf="parent"

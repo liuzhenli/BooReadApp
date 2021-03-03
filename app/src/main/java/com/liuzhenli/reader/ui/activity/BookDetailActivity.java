@@ -101,9 +101,9 @@ public class BookDetailActivity extends BaseActivity<BookDetailPresenter> implem
 
     @Override
     protected void initData() {
-
+        mOpenFrom = getIntent().getIntExtra(BookDetailActivity.OPEN_FROM, -1);
         if (mOpenFrom == AppConstant.BookOpenFrom.FROM_BOOKSHELF) {
-            mBookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(DATA_KEY);
+            mBookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(getIntent().getStringExtra(DATA_KEY));
             if (mBookShelf == null) {
                 String noteUrl = getIntent().getStringExtra("noteUrl");
                 if (!TextUtils.isEmpty(noteUrl)) {

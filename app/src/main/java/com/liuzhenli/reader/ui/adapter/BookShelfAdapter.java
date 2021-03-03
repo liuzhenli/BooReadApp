@@ -4,13 +4,10 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.liuzhenli.reader.utils.image.ImageUtil;
 import com.liuzhenli.reader.view.BadgeView;
@@ -36,11 +33,11 @@ public class BookShelfAdapter extends RecyclerArrayAdapter<BookShelfBean> {
     }
 
     @Override
-    public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseViewHolder<BookShelfBean> OnCreateViewHolder(ViewGroup parent, int viewType) {
         return new BookShelfHolder(parent, R.layout.item_bookshelf_list);
     }
 
-    public class BookShelfHolder extends BaseViewHolder<BookShelfBean> {
+    public static class BookShelfHolder extends BaseViewHolder<BookShelfBean> {
         @BindView(R.id.iv_cover)
         ImageView mIvCover;
         @BindView(R.id.bv_unread)
@@ -73,7 +70,7 @@ public class BookShelfAdapter extends RecyclerArrayAdapter<BookShelfBean> {
             mTvRead.setText(String.format("读至:%s", item.getDurChapterName() == null ? "章节名未知" : item.getDurChapterName()));
             mTvLast.setText(String.format("最新:%s", item.getLastChapterName() == null ? "章节名未知" : item.getLastChapterName()));
             if (item.getBookInfoBean() != null) {
-                ImageUtil.setImage(mContext, item.getBookInfoBean().getCoverUrl(), R.drawable.ic_book_cover_placeholder, R.drawable.book_cover, mIvCover);
+                ImageUtil.setImage(mContext, item.getBookInfoBean().getCoverUrl(), R.drawable.book_cover, R.drawable.book_cover, mIvCover);
             }
             if (item.isLoading()) {
                 mBvUnread.setVisibility(View.GONE);

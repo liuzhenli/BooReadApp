@@ -5,11 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:foreground="@drawable/selector_card_bg"
+    android:orientation="vertical"
     tools:targetApi="m">
 
     <TextView
         android:id="@+id/tv_book_chapter_name"
-        style="@style/ItemTitleStyle"
+        style="@style/ItemSubTitleStyle"
         android:layout_width="match_parent"
-        android:padding="@dimen/common_space_normal" />
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/common_space_large"
+        android:paddingTop="@dimen/common_space_normal"
+        android:paddingRight="@dimen/common_space_normal"
+        android:paddingBottom="@dimen/common_space_normal" />
+
+    <include
+        layout="@layout/item_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:paddingStart="@dimen/common_space_large" />
 </LinearLayout>

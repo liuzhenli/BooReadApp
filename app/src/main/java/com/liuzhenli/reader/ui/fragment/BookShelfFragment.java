@@ -1,5 +1,6 @@
 package com.liuzhenli.reader.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -16,10 +17,12 @@ import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.liuzhenli.common.BitIntentDataManager;
+import com.liuzhenli.common.constant.AppConstant;
 import com.liuzhenli.common.constant.RxBusTag;
 import com.liuzhenli.common.utils.ClickUtils;
 import com.liuzhenli.reader.base.BaseRVFragment;
 import com.liuzhenli.reader.network.AppComponent;
+import com.liuzhenli.reader.ui.activity.BookDetailActivity;
 import com.liuzhenli.reader.ui.activity.ReaderActivity;
 import com.liuzhenli.reader.ui.adapter.BookShelfAdapter;
 import com.liuzhenli.reader.ui.contract.BookShelfContract;
@@ -35,6 +38,8 @@ import com.microedu.reader.R;
 import java.util.List;
 
 import butterknife.BindView;
+
+import static com.liuzhenli.common.BitIntentDataManager.DATA_KEY;
 
 /**
  * describe:书架
@@ -160,6 +165,7 @@ public class BookShelfFragment extends BaseRVFragment<BookShelfPresenter, BookSh
         super.onLoadMore();
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public boolean onItemLongClick(int position) {
 
@@ -200,7 +206,15 @@ public class BookShelfFragment extends BaseRVFragment<BookShelfPresenter, BookSh
         } else {
             mVAllowUpdate.setVisibility(View.VISIBLE);
         }
-        ImageUtil.setImage(mContext, bookShelfBean.getBookInfoBean().getCoverUrl(), R.drawable.ic_book_cover_placeholder, R.drawable.book_cover, mIvCover);
+        ClickUtils.click(tvBookName, o -> {
+            String dataKey = String.valueOf(System.currentTimeMillis());
+            Intent intent = new Intent(mContext, BookDetailActivity.class);
+            intent.putExtra(BookDetailActivity.OPEN_FROM, AppConstant.BookOpenFrom.FROM_BOOKSHELF);
+            intent.putExtra(DATA_KEY, dataKey);
+            BitIntentDataManager.getInstance().putData(dataKey, bookShelfBean);
+            startActivity(intent);
+        });
+        ImageUtil.setImage(mContext, bookShelfBean.getBookInfoBean().getCoverUrl(), R.drawable.book_cover, R.drawable.book_cover, mIvCover);
         String author = TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getAuthor()) ? "未知" : bookShelfBean.getBookInfoBean().getAuthor();
         mVAllowUpdate.setChecked(bookShelfBean.getAllowUpdate());
         tvBookName.setText(bookShelfBean.getBookInfoBean().getName());
