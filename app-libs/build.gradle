@@ -60,7 +60,7 @@ dependencies {
     api "com.qmuiteam:arch:${rootProject.qmui_arch_version}"
 
     //騰訊mmkv 增加包體0.5M https://github.com/Tencent/MMKV/wiki/android_setup_cn
-    api "com.tencent:mmkv-static:1.2.2"
+    api "com.tencent:mmkv-static:1.2.7"
     //https://github.com/balysv/material-menu
     api 'com.balysv.materialmenu:material-menu:2.0.0'
 

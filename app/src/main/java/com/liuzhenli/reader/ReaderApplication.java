@@ -16,7 +16,6 @@ import com.micoredu.readerlib.content.UpLastChapterModel;
 import com.microedu.reader.BuildConfig;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
-import com.tencent.mmkv.MMKV;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.cconfig.RemoteConfigSettings;
 import com.umeng.cconfig.UMRemoteConfig;
@@ -58,7 +57,6 @@ public class ReaderApplication extends BaseApplication {
                 return BuildConfig.DEBUG;
             }
         });
-        initMMKV();
         initUmeng();
     }
 
@@ -78,9 +76,6 @@ public class ReaderApplication extends BaseApplication {
         MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO);
     }
 
-    private void initMMKV() {
-        String initialize = MMKV.initialize(this);
-    }
 
     public static ReaderApplication getInstance() {
         return mInstance;

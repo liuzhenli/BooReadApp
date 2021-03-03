@@ -1,18 +1,20 @@
 package com.liuzhenli.common;
 
 import android.annotation.TargetApi;
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Base64;
 
 
+import com.tencent.mmkv.MMKV;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.StreamCorruptedException;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,19 +23,25 @@ import java.util.Set;
  */
 public class SharedPreferencesUtil {
 
-    private static SharedPreferencesUtil prefsUtil;
-    public Context context;
-    public SharedPreferences prefs;
+    private volatile static SharedPreferencesUtil prefsUtil;
+    public Application context;
+    public MMKV prefs;
     public SharedPreferences.Editor editor;
 
     public synchronized static SharedPreferencesUtil getInstance() {
         return prefsUtil;
     }
 
-    public static void init(Context context) {
+    public static void init(Application context) {
         prefsUtil = new SharedPreferencesUtil();
         prefsUtil.context = context;
-        prefsUtil.prefs = prefsUtil.context.getSharedPreferences("config", Context.MODE_PRIVATE);
+        prefsUtil.prefs = MMKV.mmkvWithID("config");
+        // 迁移旧数据
+        {
+            SharedPreferences old_man = prefsUtil.context.getSharedPreferences("config", Context.MODE_PRIVATE);
+            prefsUtil.prefs.importFromSharedPreferences(old_man);
+            old_man.edit().clear().apply();
+        }
         prefsUtil.editor = prefsUtil.prefs.edit();
     }
 
@@ -100,42 +108,34 @@ public class SharedPreferencesUtil {
 
     public SharedPreferencesUtil putString(String key, String value) {
         editor.putString(key, value);
-        editor.commit();
         return this;
     }
 
     public SharedPreferencesUtil putInt(String key, int value) {
         editor.putInt(key, value);
-        editor.commit();
         return this;
     }
 
     public SharedPreferencesUtil putFloat(String key, float value) {
         editor.putFloat(key, value);
-        editor.commit();
         return this;
     }
 
     public SharedPreferencesUtil putLong(String key, long value) {
         editor.putLong(key, value);
-        editor.commit();
         return this;
     }
 
     public SharedPreferencesUtil putBoolean(String key, boolean value) {
         editor.putBoolean(key, value);
-        editor.commit();
         return this;
     }
 
-    public void commit() {
-        editor.commit();
-    }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public SharedPreferencesUtil putStringSet(String key, Set<String> value) {
         editor.putStringSet(key, value);
-        editor.commit();
+
         return this;
     }
 
@@ -147,7 +147,7 @@ public class SharedPreferencesUtil {
             out.writeObject(object);
             String objectVal = new String(Base64.encode(baos.toByteArray(), Base64.DEFAULT));
             editor.putString(key, objectVal);
-            editor.commit();
+
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -172,11 +172,7 @@ public class SharedPreferencesUtil {
                 ois = new ObjectInputStream(bais);
                 T t = (T) ois.readObject();
                 return t;
-            } catch (StreamCorruptedException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 try {
@@ -196,7 +192,6 @@ public class SharedPreferencesUtil {
 
     public SharedPreferencesUtil remove(String key) {
         editor.remove(key);
-        editor.commit();
         return this;
     }
 
@@ -219,7 +214,6 @@ public class SharedPreferencesUtil {
                 str += regularEx;
             }
             editor.putString(key, str);
-            editor.commit();
         }
     }
 
@@ -249,7 +243,6 @@ public class SharedPreferencesUtil {
                 str += regularEx;
             }
             editor.putString(key, str);
-            editor.commit();
         }
     }
 }

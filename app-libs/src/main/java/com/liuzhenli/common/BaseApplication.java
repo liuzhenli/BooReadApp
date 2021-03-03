@@ -16,6 +16,7 @@ import com.liuzhenli.common.constant.AppConstant;
 import com.liuzhenli.common.utils.AppFrontBackHelper;
 import com.liuzhenli.common.utils.ChannelUtil;
 import com.qmuiteam.qmui.arch.QMUISwipeBackActivityManager;
+import com.tencent.mmkv.MMKV;
 
 import java.io.File;
 import java.util.Arrays;
@@ -47,6 +48,7 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         MultiDex.install(this);
+        initMMKV();
         SharedPreferencesUtil.init(this);
         QMUISwipeBackActivityManager.init(this);
         sInstance = this;
@@ -140,6 +142,10 @@ public class BaseApplication extends Application {
     }
 
     public void initNightTheme() {
+    }
+
+    private void initMMKV() {
+        String rootDir = MMKV.initialize(this);
     }
 
 }
