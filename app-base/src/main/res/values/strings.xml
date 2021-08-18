@@ -17,6 +17,10 @@
 
     <string name="network_unusable">似乎没有网络哦</string>
 
+    <string name="common_web_ssl_error">当前网站安全证书已过期或不可信\n是否继续浏览</string>
+    <string name="common_web_ssl_error_allow">继续浏览</string>
+    <string name="common_web_ssl_error_reject">返回上一页</string>
+
     <string name="setting">设置</string>
     <string name="theme_setting">主题设置</string>
     <string name="about">关于</string>

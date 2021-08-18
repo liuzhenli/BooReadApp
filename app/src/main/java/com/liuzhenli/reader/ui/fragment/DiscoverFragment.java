@@ -174,7 +174,7 @@ public class DiscoverFragment extends BaseFragment<DiscoverPresenter> implements
         ViewPagerHelper.bind(inflate.mIndicator, inflate.mViewPager);
         inflate.mBookSourceView.setOnItemClick(this::onBookSourceChange);
         inflate.mBookSourceView.setVisibility(View.GONE);
-        TextView tvText = inflate.mViewEmpty.findViewById(R.id.tv_empty_text);
+        TextView tvText = inflate.mViewEmpty.viewEmpty.findViewById(R.id.tv_empty_text);
         if (inflate.mViewEmpty != null) {
             tvText.setText("暂无书源,搜索微信公众号:异书房,\n回复\"书源\"获取书源~");
         }
@@ -190,9 +190,9 @@ public class DiscoverFragment extends BaseFragment<DiscoverPresenter> implements
             Random random = new Random();
             int index = random.nextInt(bookSourceData.size());
             onBookSourceChange(bookSourceData.get(index));
-            inflate.mViewEmpty.setVisibility(View.GONE);
+            inflate.mViewEmpty.viewEmpty.setVisibility(View.GONE);
         } else {
-            inflate.mViewEmpty.setVisibility(View.VISIBLE);
+            inflate.mViewEmpty.viewEmpty.setVisibility(View.VISIBLE);
         }
         inflate.mBookSourceView.setData(bookSourceData);
     }
@@ -264,7 +264,7 @@ public class DiscoverFragment extends BaseFragment<DiscoverPresenter> implements
     public void onResume() {
         super.onResume();
         //如果没有书源显示,再刷新一次
-        if (inflate.mViewEmpty.getVisibility() == View.VISIBLE) {
+        if (inflate.mViewEmpty.viewEmpty.getVisibility() == View.VISIBLE) {
             onRefresh();
         }
     }

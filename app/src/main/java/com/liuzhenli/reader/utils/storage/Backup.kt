@@ -33,18 +33,21 @@ import java.util.concurrent.TimeUnit
  */
 object Backup {
 
+    private const val SHUFANG_DIR = "ShuFang"
+    private const val BACKUP_DIR = "Backups"
+
     /**生成备份文件的存储位置*/
     val backupPath =
         BaseApplication.getInstance().filesDir.absolutePath + File.separator + "backup"
 
     /***恢复备份默认地址*/
-    fun defaultPath():String {
+    fun defaultPath(): String {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
             || !AppSharedPreferenceHelper.getBackupPath("").isNullOrEmpty()
         ) {
             AppSharedPreferenceHelper.getBackupPath("")
         } else {
-            FileUtils.getSdCardPath() + File.separator + "Document/YiShuFang/backups"
+            FileUtils.getSdCardPath() + File.separator + "Documents/$SHUFANG_DIR/$BACKUP_DIR"
         }
     }
 
@@ -196,18 +199,29 @@ object Backup {
                 for (fileName in backupFileNames) {
                     val file = File(backupPath + File.separator + fileName)
                     if (file.exists()) {
+                        //Location ../ShuFang/Backups
+                        // create ShuFan dir if not exist
+                        var sfDir = treeDoc.findFile(SHUFANG_DIR)
+                        if (sfDir == null) {
+                            sfDir = treeDoc.createDirectory(SHUFANG_DIR)
+                        }
+                        // create Backup dir if not exist
+                        var backupDir = sfDir?.findFile(BACKUP_DIR)
+                        if (backupDir == null) {
+                            backupDir = sfDir?.createDirectory(BACKUP_DIR)
+                        }
                         if (isAuto) {
-                            treeDoc.findFile("auto")?.findFile(fileName)?.delete()
-                            var autoDoc = treeDoc.findFile("auto")
+                            backupDir?.findFile("auto")?.findFile(fileName)?.delete()
+                            var autoDoc = backupDir?.findFile("auto")
                             if (autoDoc == null) {
-                                autoDoc = treeDoc.createDirectory("auto")
+                                autoDoc = backupDir?.createDirectory("auto")
                             }
                             autoDoc?.createFile("", fileName)?.let {
                                 DocumentUtil.writeBytes(context, file.readBytes(), it)
                             }
                         } else {
-                            treeDoc.findFile(fileName)?.delete()
-                            treeDoc.createFile("", fileName)?.let {
+                            backupDir?.findFile(fileName)?.delete()
+                            backupDir?.createFile("", fileName)?.let {
                                 DocumentUtil.writeBytes(context, file.readBytes(), it)
                             }
                         }
@@ -220,12 +234,18 @@ object Backup {
     @Throws(java.lang.Exception::class)
     private fun copyBackup(path: String, isAuto: Boolean) {
         synchronized(this) {
+            val thePath = if (path.contains(BACKUP_DIR)) {
+                path
+            } else {
+                "$path/$BACKUP_DIR/$SHUFANG_DIR"
+            }
+
             for (fileName in backupFileNames) {
                 if (isAuto) {
                     val file = File(backupPath + File.separator + fileName)
                     if (file.exists()) {
                         file.copyTo(
-                            FileHelp.createFileIfNotExist(path + File.separator + "auto" + File.separator + fileName),
+                            FileHelp.createFileIfNotExist(thePath + File.separator + "auto" + File.separator + fileName),
                             true
                         )
                     }
@@ -233,7 +253,7 @@ object Backup {
                     val file = File(backupPath + File.separator + fileName)
                     if (file.exists()) {
                         file.copyTo(
-                            FileHelp.createFileIfNotExist(path + File.separator + fileName),
+                            FileHelp.createFileIfNotExist(thePath + File.separator + fileName),
                             true
                         )
                     }

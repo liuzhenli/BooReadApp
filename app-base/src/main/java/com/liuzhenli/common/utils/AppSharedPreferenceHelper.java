@@ -78,6 +78,16 @@ public class AppSharedPreferenceHelper {
         SharedPreferencesUtil.getInstance().putBoolean("refresh_book_shelf", refresh);
     }
 
+    /***The path to import local books. */
+    public static void setImportBookPath(String path) {
+        SharedPreferencesUtil.getInstance().putString("import_local_book_path", path);
+    }
+
+    /***The path to import local books. */
+    public String getImportBookPath() {
+        return SharedPreferencesUtil.getInstance().getString("import_local_book_path");
+    }
+
 
     public static void setProtectEyeReadMode(boolean on) {
         SharedPreferencesUtil.getInstance().putBoolean("protect_eye_read_mode", on);

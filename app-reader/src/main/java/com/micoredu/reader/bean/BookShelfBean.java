@@ -251,7 +251,7 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
         return this.chapterListSize;
     }
 
-    public void setChapterListSize(Integer chapterListSize) {
+    public void setChapterListSize(int chapterListSize) {
         this.chapterListSize = chapterListSize;
     }
 
@@ -271,7 +271,7 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
         this.allowUpdate = allowUpdate;
     }
 
-    public Boolean getUseReplaceRule() {
+    public boolean getUseReplaceRule() {
         return this.useReplaceRule;
     }
 

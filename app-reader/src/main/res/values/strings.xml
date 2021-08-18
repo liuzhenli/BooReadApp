@@ -16,7 +16,7 @@
 
     <string name="select_folder">选择文件夹</string>
     <string name="default_path">默认路径</string>
-    <string name="sys_folder_picker">系统文件夹选择器</string>
+    <string name="sys_folder_picker">系统选择器(建议选择Documents文件夹🙏)</string>
     <string name="app_folder_picker">自带选择器</string>
     <string name="a10_permission_toast">Android10以上因权限限制可能无法读写文件</string>
     <string name="backup_net_type_all">所有网络都允许自动备份到云盘</string>

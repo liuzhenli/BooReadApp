@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.net.http.SslError;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -11,11 +13,15 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.liuzhenli.common.utils.NetworkUtils;
+import com.liuzhenli.common.widget.DialogUtil;
 import com.liuzhenli.reader.ui.activity.WebViewActivity;
 import com.liuzhenli.common.utils.AppUtils;
 import com.liuzhenli.common.utils.Constant;
 import com.liuzhenli.common.utils.L;
 import com.liuzhenli.common.utils.ToastUtil;
+import com.microedu.reader.R;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -83,6 +89,18 @@ public class ZLWebViewClient extends WebViewClient {
     public void onPageFinished(WebView view, String url) {
         super.onPageFinished(view, url);
         loadComplete(view);
+    }
+
+    @Override
+    public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+        if (view.getContext() == null) {
+            return;
+        }
+        DialogUtil.showMessagePositiveDialog(view.getContext(), view.getContext().getString(R.string.dialog_title),
+                view.getContext().getString(R.string.common_web_ssl_error),
+                view.getContext().getString(R.string.common_web_ssl_error_allow), (dialog, index)
+                        -> handler.cancel(), view.getContext().getString(R.string.common_web_ssl_error_reject), (dialog, index)
+                        -> handler.proceed(), false);
     }
 
     @Override
