@@ -88,15 +88,9 @@ public class AppUtils {
     }
 
     /**
-     * 17wan 游戏 需要 url参数拼接
-     *
      * @param url 源url
      */
     public static String resetGameUrl(String url) {
-        if (url.contains("?") && !url.endsWith("?")) {
-           // url = url + "&";
-        }
-
         return url;
     }
 

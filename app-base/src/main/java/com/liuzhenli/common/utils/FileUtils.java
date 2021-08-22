@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 
 
@@ -929,5 +930,17 @@ public class FileUtils {
             }
         }
         return null;
+    }
+
+    public static boolean isContentFile(Uri uri) {
+        return uri != null && TextUtils.equals(uri.getScheme(), "content");
+    }
+
+    public static boolean isContentFile(String path) {
+        return path != null && path.startsWith("content://");
+    }
+
+    public static boolean isContentFile(File file) {
+        return file != null && file.getAbsolutePath().startsWith("content://");
     }
 }

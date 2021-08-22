@@ -9,9 +9,11 @@ import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.FragmentActivity;
 
 import com.liuzhenli.common.utils.AppSharedPreferenceHelper;
+import com.liuzhenli.common.utils.FileUtils;
 import com.liuzhenli.common.utils.L;
 import com.liuzhenli.common.utils.media.ImportBookFileHelper;
 import com.liuzhenli.common.base.RxPresenter;
+import com.liuzhenli.reader.ReaderApplication;
 import com.liuzhenli.reader.bean.LocalFileBean;
 import com.liuzhenli.reader.network.Api;
 import com.liuzhenli.reader.ui.contract.LocalTxtContract;
@@ -19,6 +21,10 @@ import com.liuzhenli.common.utils.Constant;
 import com.liuzhenli.reader.utils.BackupRestoreUi;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +38,7 @@ import javax.inject.Inject;
  */
 public class LocalTxtPresenter extends RxPresenter<LocalTxtContract.View> implements LocalTxtContract.Presenter<LocalTxtContract.View> {
 
+    private static final String LOCAL_BOOK_PATH = Constant.BASE_PATH + "local/";
 
     @Inject
     public LocalTxtPresenter() {
@@ -99,19 +106,40 @@ public class LocalTxtPresenter extends RxPresenter<LocalTxtContract.View> implem
     }
 
     private void addFileList(List<LocalFileBean> fileList, DocumentFile documentFile) {
+        Context context = ReaderApplication.getInstance();
         String fileName = documentFile.getName();
-        L.e("111111", documentFile.getName());
-        LocalFileBean localFile = new LocalFileBean();
-        localFile.file = new File(documentFile.getUri().toString());
-        localFile.fileType = Constant.FileAttr.FILE;
-        if (fileName.endsWith(Constant.Fileuffix.TET)) {
-            localFile.Fileuffix = Constant.Fileuffix.TET;
-        } else if (fileName.endsWith(Constant.Fileuffix.PDF)) {
-            localFile.Fileuffix = Constant.Fileuffix.PDF;
-        } else if (fileName.endsWith(Constant.Fileuffix.EPUB)) {
-            localFile.Fileuffix = Constant.Fileuffix.EPUB;
+
+        try {
+            FileUtils.createDir(LOCAL_BOOK_PATH);
+            File doc = FileUtils.createFile(LOCAL_BOOK_PATH + documentFile.getName());
+            InputStream inputStream = context.getContentResolver().openInputStream(documentFile.getUri());
+            OutputStream outputStream = new FileOutputStream(doc);
+            byte[] buf = new byte[1024 * 100];
+            int n = 0;
+            while ((n = inputStream.read(buf)) > 0) {
+                outputStream.write(buf, 0, n);
+                outputStream.flush();
+            }
+            outputStream.close();
+            inputStream.close();
+
+            LocalFileBean localFile = new LocalFileBean();
+            localFile.file = doc;
+            localFile.fileType = Constant.FileAttr.FILE;
+            if (fileName.endsWith(Constant.Fileuffix.TET)) {
+                localFile.Fileuffix = Constant.Fileuffix.TET;
+            } else if (fileName.endsWith(Constant.Fileuffix.PDF)) {
+                localFile.Fileuffix = Constant.Fileuffix.PDF;
+            } else if (fileName.endsWith(Constant.Fileuffix.EPUB)) {
+                localFile.Fileuffix = Constant.Fileuffix.EPUB;
+            }
+            fileList.add(localFile);
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        fileList.add(localFile);
+
+
     }
 
 
