@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:layout_toLeftOf="@+id/tv_local_import"
+        android:layout_toLeftOf="@+id/ll_right"
         android:layout_toRightOf="@id/image_local_book"
         android:orientation="vertical">
 
@@ -41,27 +41,35 @@
 
     </LinearLayout>
 
-    <CheckBox
-        android:id="@+id/cb_local_check"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="3dp"
-        android:button="@drawable/base_checkbox_background"
-        android:clickable="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false" />
-
-    <TextView
-        android:id="@+id/tv_local_import"
+    <LinearLayout
+        android:id="@+id/ll_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="5dp"
-        android:text="已在书架"
-        android:textColor="@color/text_color_99"
-        android:textSize="@dimen/txt_size_12"
-        android:visibility="invisible" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/cb_local_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:button="@drawable/base_checkbox_background"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false" />
+
+        <TextView
+            android:id="@+id/tv_local_import"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已在书架"
+            android:textColor="@color/text_color_99"
+            android:textSize="@dimen/txt_size_12"
+            android:visibility="invisible" />
+    </LinearLayout>
+
 
 </RelativeLayout>

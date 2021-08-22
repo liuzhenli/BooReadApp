@@ -28,6 +28,8 @@ public class ImportBookModel extends BaseModelImpl {
 
             boolean isNew = false;
 
+
+
             BookShelfBean bookShelfBean = BookshelfHelper.getBook(file.getAbsolutePath());
             if (bookShelfBean == null) {
                 isNew = true;

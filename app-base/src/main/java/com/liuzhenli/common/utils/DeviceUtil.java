@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import nl.siegmann.epublib.domain.Book;
+
 public class DeviceUtil {
 
     public static String getMobileModel() {
@@ -44,19 +46,19 @@ public class DeviceUtil {
     //有的机型是取不到或者取到的为空
     public static String getDeviceIMEI(Context ctx) {
         TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
-        if(ActivityCompat.checkSelfPermission(ctx, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED){
+        if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             return tm.getDeviceId();
-        }else{
+        } else {
             return "";
         }
     }
 
     public static String getDeviceIMSI(Context context) {
         TelephonyManager teleManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        if(ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED){
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             String imsi = teleManager.getSubscriberId();
             return imsi;
-        }else{
+        } else {
             return "";
         }
 
@@ -81,9 +83,9 @@ public class DeviceUtil {
 
         deviceId = "";
         simSerial = "";
-        if(ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED){
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             //没有获取到权限
-        }else{
+        } else {
             deviceId = "" + teleManager.getDeviceId();
             simSerial = "" + teleManager.getSimSerialNumber();
         }
@@ -309,5 +311,12 @@ public class DeviceUtil {
             return "02:00:00:00:00:02";
         }
         return macAddress;
+    }
+
+    /**
+     * android 10 及以后的版本
+     */
+    public static boolean isLaterQ() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
     }
 }

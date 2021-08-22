@@ -8,6 +8,8 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.liuzhenli.common.base.BaseRVFragment;
 import com.liuzhenli.common.AppComponent;
+import com.liuzhenli.common.utils.AppSharedPreferenceHelper;
+import com.liuzhenli.common.utils.DeviceUtil;
 import com.liuzhenli.reader.DaggerReadBookComponent;
 import com.liuzhenli.reader.bean.LocalFileBean;
 import com.liuzhenli.reader.ui.adapter.LocalTxtAdapter;
@@ -20,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * describe: 导入书籍,文件夹
+ * describe: 导入书籍,文件
  *
  * @author Liuzhenli on 2019-12-15 10:06
  */
@@ -45,7 +47,7 @@ public class LocalTxtFragment extends BaseRVFragment<LocalTxtPresenter, LocalFil
 
     @Override
     public void configViews() {
-        initAdapter(LocalTxtAdapter.class, false, false);
+        initAdapter(LocalTxtAdapter.class, false, false, true);
         refreshData();
     }
 
@@ -97,7 +99,12 @@ public class LocalTxtFragment extends BaseRVFragment<LocalTxtPresenter, LocalFil
 
     public void refreshData() {
         if (mPresenter != null) {
-            mPresenter.getLocalTxt((FragmentActivity) mContext);
+            //
+            if (DeviceUtil.isLaterQ()) {
+                mPresenter.getLocalTxt(this.getApplicationContext(), AppSharedPreferenceHelper.getImportLocalBookPath());
+            } else {
+                mPresenter.getLocalTxt((FragmentActivity) mContext);
+            }
         }
     }
 

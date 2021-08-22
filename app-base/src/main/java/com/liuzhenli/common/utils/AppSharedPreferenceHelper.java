@@ -181,4 +181,12 @@ public class AppSharedPreferenceHelper {
         }
         return new HashMap<>();
     }
+
+    public static String getImportLocalBookPath() {
+        return SharedPreferencesUtil.getInstance().getString("import_local_book_path");
+    }
+
+    public static void setImportLocalBookPath(String path) {
+        SharedPreferencesUtil.getInstance().putString("import_local_book_path", path);
+    }
 }

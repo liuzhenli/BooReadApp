@@ -120,7 +120,7 @@ public class LocalFileFragment extends BaseFragment<LocalFilePresenter> implemen
         refreshCurrentDirPath(pathAdapter.getItem(position));
     }
 
-    private void refreshCurrentDirPath(String currentPath) {
+    public void refreshCurrentDirPath(String currentPath) {
         if (File.separator.equals(currentPath)) {
             pathAdapter.updatePath(File.separator);
         } else {

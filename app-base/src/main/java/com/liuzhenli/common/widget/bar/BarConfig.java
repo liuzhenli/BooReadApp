@@ -99,17 +99,18 @@ class BarConfig {
     }
 
     private int getInternalDimensionSize(Resources res, String key) {
-        int result = 0;
-        try {
-            @SuppressLint("PrivateApi") Class clazz = Class.forName("com.android.internal.R$dimen");
-            Object object = clazz.newInstance();
-            int resourceId = Integer.parseInt(clazz.getField(key).get(object).toString());
-            if (resourceId > 0)
-                result = res.getDimensionPixelSize(resourceId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
+//        int result = 0;
+//        try {
+//            @SuppressLint("PrivateApi") Class clazz = Class.forName("com.android.internal.R$dimen");
+//            Object object = clazz.newInstance();
+//            int resourceId = Integer.parseInt(clazz.getField(key).get(object).toString());
+//            if (resourceId > 0)
+//                result = res.getDimensionPixelSize(resourceId);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return result;
+        return res.getIdentifier(key,"dimen","android");
     }
 
     @SuppressLint("NewApi")

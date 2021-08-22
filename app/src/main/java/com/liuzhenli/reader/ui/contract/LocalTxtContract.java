@@ -1,6 +1,8 @@
 package com.liuzhenli.reader.ui.contract;
 
 
+import android.content.Context;
+
 import androidx.fragment.app.FragmentActivity;
 
 import com.liuzhenli.common.base.BaseContract;
@@ -20,5 +22,7 @@ public class LocalTxtContract {
 
     public interface Presenter<T> extends BaseContract.BasePresenter<T> {
         void getLocalTxt(FragmentActivity activity);
+
+        void getLocalTxt(Context context, String path);
     }
 }

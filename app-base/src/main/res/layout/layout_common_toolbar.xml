@@ -28,13 +28,23 @@
         android:textSize="18sp" />
 
     <TextView
-        android:visibility="gone"
         android:id="@+id/tv_toolbar_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:layout_marginRight="@dimen/common_space_large"
         android:text="关闭"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/iv_toolbar_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="@dimen/common_space_large"
+        android:src="@drawable/ic_more"
+        android:textColor="@color/white"
+        android:visibility="gone" />
 
 </androidx.appcompat.widget.Toolbar>

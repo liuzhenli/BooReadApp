@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.ArrayMap;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -38,6 +39,7 @@ public abstract class BaseActivity<T1 extends BaseContract.BasePresenter> extend
     public final static String START_SHEAR_ELE = "start_with_share_ele";
     protected Context mContext;
     public TextView mTvTitle, mTvRight;
+    public ImageView mIvRight;
     public Toolbar mToolBar;
     protected EasyRecyclerView mRecyclerView;
     @Inject
@@ -73,6 +75,7 @@ public abstract class BaseActivity<T1 extends BaseContract.BasePresenter> extend
         if (mToolBar != null) {
             mTvTitle = findViewById(R.id.tv_toolbar_title);
             mTvRight = findViewById(R.id.tv_toolbar_right);
+            mIvRight = findViewById(R.id.iv_toolbar_right);
             mToolBar.setNavigationOnClickListener(v -> onBackPressed());
             mToolBar.setOverflowIcon(getResources().getDrawable(R.drawable.ic_more));
             initToolBar();

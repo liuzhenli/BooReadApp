@@ -1,15 +1,22 @@
 package com.liuzhenli.reader.ui.presenter;
 
+import android.content.Context;
+import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.FragmentActivity;
 
+import com.liuzhenli.common.utils.AppSharedPreferenceHelper;
+import com.liuzhenli.common.utils.L;
 import com.liuzhenli.common.utils.media.ImportBookFileHelper;
 import com.liuzhenli.common.base.RxPresenter;
 import com.liuzhenli.reader.bean.LocalFileBean;
 import com.liuzhenli.reader.network.Api;
 import com.liuzhenli.reader.ui.contract.LocalTxtContract;
 import com.liuzhenli.common.utils.Constant;
+import com.liuzhenli.reader.utils.BackupRestoreUi;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -67,4 +74,45 @@ public class LocalTxtPresenter extends RxPresenter<LocalTxtContract.View> implem
             mView.showLocalTxt(fileList);
         }));
     }
+
+    @Override
+    public void getLocalTxt(Context context, String path) {
+        List<LocalFileBean> fileList = new ArrayList<>();
+        if (TextUtils.isEmpty(path)) {
+            mView.showLocalTxt(fileList);
+            return;
+        }
+
+        DocumentFile documentFile = DocumentFile.fromTreeUri(context, Uri.parse(path));
+        if (documentFile != null && documentFile.isDirectory()) {
+            for (DocumentFile file : documentFile.listFiles()) {
+                if (file.isDirectory()) {
+                    getLocalTxt(context, file.getUri().toString());
+                } else {
+                    addFileList(fileList, file);
+                }
+            }
+        } else if (documentFile != null && documentFile.isFile() && documentFile.getName() != null) {
+            addFileList(fileList, documentFile);
+        }
+        mView.showLocalTxt(fileList);
+    }
+
+    private void addFileList(List<LocalFileBean> fileList, DocumentFile documentFile) {
+        String fileName = documentFile.getName();
+        L.e("111111", documentFile.getName());
+        LocalFileBean localFile = new LocalFileBean();
+        localFile.file = new File(documentFile.getUri().toString());
+        localFile.fileType = Constant.FileAttr.FILE;
+        if (fileName.endsWith(Constant.Fileuffix.TET)) {
+            localFile.Fileuffix = Constant.Fileuffix.TET;
+        } else if (fileName.endsWith(Constant.Fileuffix.PDF)) {
+            localFile.Fileuffix = Constant.Fileuffix.PDF;
+        } else if (fileName.endsWith(Constant.Fileuffix.EPUB)) {
+            localFile.Fileuffix = Constant.Fileuffix.EPUB;
+        }
+        fileList.add(localFile);
+    }
+
+
 }
