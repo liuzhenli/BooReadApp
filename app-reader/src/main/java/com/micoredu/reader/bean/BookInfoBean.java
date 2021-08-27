@@ -179,7 +179,7 @@ public class BookInfoBean implements Cloneable, Serializable {
     }
 
     private boolean isEpub() {
-        return Objects.equals(tag, BookShelfBean.LOCAL_TAG) && noteUrl.toLowerCase().matches(".*\\.epub$");
+        return TextUtils.equals(tag, BookShelfBean.LOCAL_TAG) && noteUrl.toLowerCase().matches(".*\\.epub$");
     }
 
     public String getBookSourceType() {

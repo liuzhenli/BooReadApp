@@ -1,6 +1,7 @@
 package com.liuzhenli.reader.bean;
 
 import com.liuzhenli.common.utils.StringUtils;
+import com.liuzhenli.common.utils.filepicker.util.DateUtils;
 import com.micoredu.reader.bean.BookInfoBean;
 import com.micoredu.reader.bean.BookShelfBean;
 import com.micoredu.reader.bean.LocBookShelfBean;
@@ -22,15 +23,14 @@ public class ImportBookModel extends BaseModelImpl {
         return new ImportBookModel();
     }
 
-    public Observable<LocBookShelfBean> importBook(final File file) {
+    public Observable<LocBookShelfBean> importBook(final LocalFileBean localFileBean) {
         return Observable.create(e -> {
             //判断文件是否存在
-
+            //File file = localFileBean.file;
             boolean isNew = false;
 
 
-
-            BookShelfBean bookShelfBean = BookshelfHelper.getBook(file.getAbsolutePath());
+            BookShelfBean bookShelfBean = BookshelfHelper.getBook(localFileBean.filePath);
             if (bookShelfBean == null) {
                 isNew = true;
                 bookShelfBean = new BookShelfBean();
@@ -44,12 +44,12 @@ public class ImportBookModel extends BaseModelImpl {
                 bookShelfBean.setDurChapterPage(0);
                 bookShelfBean.setGroup(3);
                 bookShelfBean.setTag(BookShelfBean.LOCAL_TAG);
-                bookShelfBean.setNoteUrl(file.getAbsolutePath());
+                bookShelfBean.setNoteUrl(localFileBean.filePath);
                 bookShelfBean.setAllowUpdate(false);
 
                 BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
-                String fileName = file.getName();
-                int lastDotIndex = file.getName().lastIndexOf(".");
+                String fileName = localFileBean.fileName;
+                int lastDotIndex = fileName.lastIndexOf(".");
                 if (lastDotIndex > 0)
                     fileName = fileName.substring(0, lastDotIndex);
                 int authorIndex = fileName.indexOf("作者");
@@ -66,9 +66,9 @@ public class ImportBookModel extends BaseModelImpl {
                 } else {
                     bookInfoBean.setName(fileName);
                 }
-                bookInfoBean.setFinalRefreshData(file.lastModified());
+                bookInfoBean.setFinalRefreshData(localFileBean.time.getTime());
                 bookInfoBean.setCoverUrl("");
-                bookInfoBean.setNoteUrl(file.getAbsolutePath());
+                bookInfoBean.setNoteUrl(localFileBean.filePath);
                 bookInfoBean.setTag(BookShelfBean.LOCAL_TAG);
                 bookInfoBean.setOrigin(StringUtils.getString(R.string.local));
 

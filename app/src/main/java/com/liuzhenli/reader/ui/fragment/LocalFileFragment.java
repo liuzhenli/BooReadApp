@@ -1,20 +1,25 @@
 package com.liuzhenli.reader.ui.fragment;
 
+import android.net.Uri;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.documentfile.provider.DocumentFile;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.liuzhenli.common.base.BaseFragment;
 import com.liuzhenli.common.AppComponent;
+import com.liuzhenli.common.utils.AppSharedPreferenceHelper;
+import com.liuzhenli.common.utils.Constant;
+import com.liuzhenli.common.utils.DeviceUtil;
 import com.liuzhenli.reader.DaggerReadBookComponent;
+import com.liuzhenli.reader.bean.LocalFileBean;
 import com.liuzhenli.reader.ui.adapter.LocalFileAdapter;
 import com.liuzhenli.reader.ui.contract.LocalFileContract;
 import com.liuzhenli.reader.ui.presenter.LocalFilePresenter;
-import com.liuzhenli.common.utils.Constant;
 import com.liuzhenli.common.utils.ToastUtil;
 import com.liuzhenli.common.utils.filepicker.adapter.PathAdapter;
 import com.microedu.reader.databinding.FragmentLocalfileBinding;
@@ -22,23 +27,21 @@ import com.orhanobut.logger.Logger;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
- * describe:
- * <p>
- * 导入书籍,文件夹
+ * describe:导入书籍,文件夹
  *
  * @author Liuzhenli on 2019-12-15 10:06
  */
 public class LocalFileFragment extends BaseFragment<LocalFilePresenter> implements LocalFileContract.View, PathAdapter.CallBack {
 
     private LocalFileAdapter mAdapter;
-    /*** 初始文件路径***/
+    /*** 初始文件路径  android Q 以下版本***/
     private File rootDir;
     private PathAdapter pathAdapter = new PathAdapter();
     private FragmentLocalfileBinding inflate;
+    private DocumentFile rootDoc;
 
     @Override
     public View bindContentView(LayoutInflater inflater, ViewGroup container, boolean attachParent) {
@@ -64,26 +67,41 @@ public class LocalFileFragment extends BaseFragment<LocalFilePresenter> implemen
         } else {
             rootDir = Environment.getRootDirectory();
         }
-        //读取本地书 // mnt/sdcard
-        mPresenter.getDirectory(rootDir);
+
+        //目录
+
+        if (DeviceUtil.isLaterQ()) {
+            String importLocalBookPath = AppSharedPreferenceHelper.getImportLocalBookPath();
+            if (importLocalBookPath != null && importLocalBookPath.startsWith(Constant.CONTENT_PREFIX)) {
+                rootDoc = DocumentFile.fromTreeUri(mContext.getApplicationContext(), Uri.parse(importLocalBookPath));
+                if (rootDoc != null) {
+                    mPresenter.getDirectory(rootDoc);
+                }
+            }
+        } else {
+            //读取本地书 // mnt/sdcard
+            mPresenter.getDirectory(rootDir);
+        }
+
     }
 
     @Override
     public void configViews() {
         inflate.rvPath.setLayoutManager(new LinearLayoutManager(mContext));
+        inflate.recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mAdapter = new LocalFileAdapter(mContext);
         inflate.recyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(position -> {
-            HashMap<String, Object> item = mAdapter.getItem(position);
-            rootDir = (File) item.get(Constant.FileAttr.FILE);
+            LocalFileBean item = mAdapter.getItem(position);
+            rootDir = (File) item.file;
             if (rootDir != null && rootDir.isDirectory()) {
                 refreshCurrentDirPath(rootDir.getPath());
                 //当前文件的路径
             } else if (rootDir != null) {
                 //已经获取到文件的路径  设置选中状态
                 ToastUtil.showToast(rootDir.getAbsolutePath());
-                boolean checked = (boolean) item.get(Constant.FileAttr.CHECKED);
-                mAdapter.getRealAllData().get(position).put(Constant.FileAttr.CHECKED, !checked);
+                boolean checked = item.isSelected;
+                mAdapter.getRealAllData().get(position).isSelected = !checked;
             }
             mAdapter.notifyDataSetChanged();
         });
@@ -94,7 +112,7 @@ public class LocalFileFragment extends BaseFragment<LocalFilePresenter> implemen
     }
 
     @Override
-    public void showDirectory(ArrayList<HashMap<String, Object>> data, File file) {
+    public void showDirectory(ArrayList<LocalFileBean> data, File file) {
         mAdapter.clear();
         mAdapter.addAll(data);
         mAdapter.notifyDataSetChanged();
@@ -129,14 +147,14 @@ public class LocalFileFragment extends BaseFragment<LocalFilePresenter> implemen
         mPresenter.getDirectory(new File(currentPath));
     }
 
-    public List<File> getSelectedBooks() {
-        ArrayList<File> bookFiles = new ArrayList<>();
-        List<HashMap<String, Object>> data = mAdapter.getRealAllData();
+    public List<LocalFileBean> getSelectedBooks() {
+        ArrayList<LocalFileBean> bookFiles = new ArrayList<>();
+        List<LocalFileBean> data = mAdapter.getRealAllData();
         for (int i = 0; i < data.size(); i++) {
-            HashMap<String, Object> item = data.get(i);
-            rootDir = (File) item.get(Constant.FileAttr.FILE);
-            if (rootDir != null && rootDir.isFile() && (boolean) item.get(Constant.FileAttr.CHECKED)) {
-                bookFiles.add(rootDir);
+            LocalFileBean item = data.get(i);
+            rootDir = (File) item.file;
+            if (rootDir != null && rootDir.isFile() && (boolean) item.isSelected) {
+                bookFiles.add(item);
                 Logger.e(rootDir.getAbsolutePath());
             }
         }
@@ -145,5 +163,9 @@ public class LocalFileFragment extends BaseFragment<LocalFilePresenter> implemen
 
     public void notifyDataChanged() {
         mAdapter.notifyDataSetChanged();
+    }
+
+    public void updatePath(DocumentFile documentFile) {
+
     }
 }

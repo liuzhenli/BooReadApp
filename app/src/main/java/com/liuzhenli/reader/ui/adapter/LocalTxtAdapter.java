@@ -47,11 +47,11 @@ public class LocalTxtAdapter extends RecyclerArrayAdapter<LocalFileBean> {
         @Override
         public void setData(LocalFileBean item) {
             super.setData(item);
-            //处理文件选中的逻辑
-            List<BookShelfBean> list= AppReaderDbHelper.getInstance().getDatabase().getBookShelfDao().getByNoteUrl(item.file.toString());
+            //处理文件选中的逻辑 查看数据库中有没有这本书,如果有则显示已经在书架中
+            List<BookShelfBean> list= AppReaderDbHelper.getInstance().getDatabase().getBookShelfDao().getByNoteUrl(item.filePath);
             int size = list.size();
             inflate.name.setText(item.file.getName());
-            if (item.fileType == null || item.fileType.equals(Constant.FileAttr.ZERO)) {
+            if (item.fileType == null || item.fileType.equals(Constant.FileAttr.DIRECTORY)) {
                 inflate.imageLocalBook.setImageResource(R.drawable.dir);
                 inflate.cbLocalCheck.setVisibility(View.GONE);
                 inflate.tvLocalImport.setVisibility(View.GONE);

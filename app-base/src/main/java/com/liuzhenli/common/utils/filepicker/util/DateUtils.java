@@ -30,6 +30,9 @@ public class DateUtils extends android.text.format.DateUtils {
     @Retention(RetentionPolicy.SOURCE)
     public @interface DifferenceMode {
     }
+    public static String format(Date date){
+        return sd.format(date);
+    }
 
     public static long calculateDifferentSecond(Date startDate, Date endDate) {
         return calculateDifference(startDate, endDate, Second);

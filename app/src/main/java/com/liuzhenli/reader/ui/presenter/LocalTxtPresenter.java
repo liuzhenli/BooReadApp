@@ -3,22 +3,17 @@ package com.liuzhenli.reader.ui.presenter;
 import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.FragmentActivity;
 
-import com.liuzhenli.common.utils.AppSharedPreferenceHelper;
 import com.liuzhenli.common.utils.FileUtils;
-import com.liuzhenli.common.utils.L;
 import com.liuzhenli.common.utils.media.ImportBookFileHelper;
 import com.liuzhenli.common.base.RxPresenter;
 import com.liuzhenli.reader.ReaderApplication;
 import com.liuzhenli.reader.bean.LocalFileBean;
-import com.liuzhenli.reader.network.Api;
 import com.liuzhenli.reader.ui.contract.LocalTxtContract;
 import com.liuzhenli.common.utils.Constant;
-import com.liuzhenli.reader.utils.BackupRestoreUi;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,6 +22,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -37,8 +33,6 @@ import javax.inject.Inject;
  * @author Liuzhenli on 2019-12-15 10:29
  */
 public class LocalTxtPresenter extends RxPresenter<LocalTxtContract.View> implements LocalTxtContract.Presenter<LocalTxtContract.View> {
-
-    private static final String LOCAL_BOOK_PATH = Constant.BASE_PATH + "local/";
 
     @Inject
     public LocalTxtPresenter() {
@@ -56,17 +50,20 @@ public class LocalTxtPresenter extends RxPresenter<LocalTxtContract.View> implem
                 LocalFileBean localFile = new LocalFileBean();
                 localFile.file = file;
                 String fileName = file.getName();
+                localFile.fileName = fileName;
+                localFile.time = new Date(file.lastModified());
+                localFile.filePath = file.getAbsolutePath();
                 if (file.isDirectory()) {// 文件
-                    localFile.fileType = Constant.FileAttr.ZERO;
+                    localFile.fileType = Constant.FileAttr.DIRECTORY;
 
                 } else if (file.isFile()) {
                     localFile.fileType = Constant.FileAttr.FILE;
-                    if (fileName.endsWith(Constant.Fileuffix.TET)) {
-                        localFile.Fileuffix = Constant.Fileuffix.TET;
-                    } else if (fileName.endsWith(Constant.Fileuffix.PDF)) {
-                        localFile.Fileuffix = Constant.Fileuffix.PDF;
-                    } else if (fileName.endsWith(Constant.Fileuffix.EPUB)) {
-                        localFile.Fileuffix = Constant.Fileuffix.EPUB;
+                    if (fileName.endsWith(Constant.FileSuffix.TXT)) {
+                        localFile.FileSuffix = Constant.FileSuffix.TXT;
+                    } else if (fileName.endsWith(Constant.FileSuffix.PDF)) {
+                        localFile.FileSuffix = Constant.FileSuffix.PDF;
+                    } else if (fileName.endsWith(Constant.FileSuffix.EPUB)) {
+                        localFile.FileSuffix = Constant.FileSuffix.EPUB;
                     }
                 }
                 if (file.listFiles() != null) {// 文件夹非空
@@ -108,10 +105,14 @@ public class LocalTxtPresenter extends RxPresenter<LocalTxtContract.View> implem
     private void addFileList(List<LocalFileBean> fileList, DocumentFile documentFile) {
         Context context = ReaderApplication.getInstance();
         String fileName = documentFile.getName();
+        if (fileName == null) {
+            return;
+        }
 
         try {
-            FileUtils.createDir(LOCAL_BOOK_PATH);
-            File doc = FileUtils.createFile(LOCAL_BOOK_PATH + documentFile.getName());
+            FileUtils.createDir(Constant.LOCAL_BOOK_PATH);
+            File doc = FileUtils.createFile(Constant.LOCAL_BOOK_PATH + documentFile.getName());
+
             InputStream inputStream = context.getContentResolver().openInputStream(documentFile.getUri());
             OutputStream outputStream = new FileOutputStream(doc);
             byte[] buf = new byte[1024 * 100];
@@ -124,14 +125,15 @@ public class LocalTxtPresenter extends RxPresenter<LocalTxtContract.View> implem
             inputStream.close();
 
             LocalFileBean localFile = new LocalFileBean();
+            localFile.filePath = documentFile.getUri().toString();
             localFile.file = doc;
             localFile.fileType = Constant.FileAttr.FILE;
-            if (fileName.endsWith(Constant.Fileuffix.TET)) {
-                localFile.Fileuffix = Constant.Fileuffix.TET;
-            } else if (fileName.endsWith(Constant.Fileuffix.PDF)) {
-                localFile.Fileuffix = Constant.Fileuffix.PDF;
-            } else if (fileName.endsWith(Constant.Fileuffix.EPUB)) {
-                localFile.Fileuffix = Constant.Fileuffix.EPUB;
+            if (fileName.endsWith(Constant.FileSuffix.TXT)) {
+                localFile.FileSuffix = Constant.FileSuffix.TXT;
+            } else if (fileName.endsWith(Constant.FileSuffix.PDF)) {
+                localFile.FileSuffix = Constant.FileSuffix.PDF;
+            } else if (fileName.endsWith(Constant.FileSuffix.EPUB)) {
+                localFile.FileSuffix = Constant.FileSuffix.EPUB;
             }
             fileList.add(localFile);
 

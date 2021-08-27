@@ -114,12 +114,12 @@ public class ImportLocalBookActivity extends BaseTabActivity<ImportLocalBookPres
 
             if (mFragmentList.get(getCurrentPagePosition()) instanceof LocalFileFragment) {
                 LocalFileFragment fragment = (LocalFileFragment) (mFragmentList.get(getCurrentPagePosition()));
-                List<File> selectedBooks = fragment.getSelectedBooks();
+                List<LocalFileBean> selectedBooks = fragment.getSelectedBooks();
                 mPresenter.addToBookShelf(selectedBooks);
                 fragment.notifyDataChanged();
             } else if (mFragmentList.get(getCurrentPagePosition()) instanceof LocalTxtFragment) {
                 LocalTxtFragment fragment = (LocalTxtFragment) mFragmentList.get(getCurrentPagePosition());
-                List<File> selectedBooks = fragment.getSelectedBooks();
+                List<LocalFileBean> selectedBooks = fragment.getSelectedBooks();
                 mPresenter.addToBookShelf(selectedBooks);
                 fragment.notifyDataChanged();
             }
@@ -127,9 +127,9 @@ public class ImportLocalBookActivity extends BaseTabActivity<ImportLocalBookPres
         ClickUtils.click(inflate.mViewDeleteFile, o -> {
             if (mFragmentList.get(getCurrentPagePosition()) instanceof LocalFileFragment) {
                 LocalFileFragment fragment = (LocalFileFragment) (mFragmentList.get(getCurrentPagePosition()));
-                List<File> selectedBooks = fragment.getSelectedBooks();
-                for (File selectedBook : selectedBooks) {
-                    FileUtils.deleteFile(selectedBook);
+                List<LocalFileBean> selectedBooks = fragment.getSelectedBooks();
+                for (LocalFileBean selectedBook : selectedBooks) {
+                    FileUtils.deleteFile(selectedBook.file);
                 }
                 fragment.notifyDataChanged();
             } else if (mFragmentList.get(getCurrentPagePosition()) instanceof LocalTxtFragment) {
@@ -138,10 +138,10 @@ public class ImportLocalBookActivity extends BaseTabActivity<ImportLocalBookPres
                     @Override
                     public void onClick(QMUIDialog dialog, int index) {
                         LocalTxtFragment fragment = (LocalTxtFragment) mFragmentList.get(getCurrentPagePosition());
-                        List<File> selectedBooks = fragment.getSelectedBooks();
-                        for (File selectedBook : selectedBooks) {
+                        List<LocalFileBean> selectedBooks = fragment.getSelectedBooks();
+                        for (LocalFileBean selectedBook : selectedBooks) {
                             try {
-                                FileUtils.deleteFile(selectedBook);
+                                FileUtils.deleteFile(selectedBook.file);
                                 fragment.notifyDataChanged();
                                 ToastUtil.showToast("已经删除");
                                 fragment.refreshData();

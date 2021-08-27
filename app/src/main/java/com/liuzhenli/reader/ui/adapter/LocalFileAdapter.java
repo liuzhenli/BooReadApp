@@ -1,12 +1,14 @@
 package com.liuzhenli.reader.ui.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.liuzhenli.common.utils.Constant;
 import com.liuzhenli.common.widget.recyclerview.adapter.BaseViewHolder;
 import com.liuzhenli.common.widget.recyclerview.adapter.RecyclerArrayAdapter;
+import com.liuzhenli.reader.bean.LocalFileBean;
 import com.micoredu.reader.bean.BookShelfBean;
 import com.micoredu.reader.helper.AppReaderDbHelper;
 import com.microedu.reader.R;
@@ -23,7 +25,7 @@ import java.util.Objects;
  *
  * @author Liuzhenli on 2019-12-15 10:38
  */
-public class LocalFileAdapter extends RecyclerArrayAdapter<HashMap<String, Object>> {
+public class LocalFileAdapter extends RecyclerArrayAdapter<LocalFileBean> {
 
 
     public LocalFileAdapter(Context context) {
@@ -35,7 +37,7 @@ public class LocalFileAdapter extends RecyclerArrayAdapter<HashMap<String, Objec
         return new ViewHolder(parent, R.layout.item_local);
     }
 
-    class ViewHolder extends BaseViewHolder {
+    class ViewHolder extends BaseViewHolder<LocalFileBean> {
         ItemLocalBinding inflate;
 
         public ViewHolder(ViewGroup parent, int res) {
@@ -44,32 +46,31 @@ public class LocalFileAdapter extends RecyclerArrayAdapter<HashMap<String, Objec
         }
 
         @Override
-        public void setData(Object item) {
+        public void setData(LocalFileBean item) {
             super.setData(item);
-            HashMap hashMap = (HashMap) item;
-            if (hashMap.get(Constant.FileAttr.IMAGE) != null && Objects.equals(hashMap.get(Constant.FileAttr.IMAGE), Constant.FileAttr.ZERO)) {
+
+            if (item.fileType != null && TextUtils.equals(item.fileType, Constant.FileAttr.DIRECTORY)) {
                 inflate.imageLocalBook.setImageResource(R.drawable.dir);
             } else {
                 inflate.imageLocalBook.setImageResource(R.drawable.txt);
             }
-            inflate.name.setText(Objects.requireNonNull(hashMap.get(Constant.FileAttr.NAME)).toString());
+            inflate.name.setText(item.fileName);
             try {
-                inflate.size.setText(Objects.requireNonNull(hashMap.get(Constant.FileAttr.SIZE)).toString());
-
+                inflate.size.setText(item.fileCount);
             } catch (Exception e) {
                 e.printStackTrace();
                 inflate.size.setVisibility(View.GONE);
             }
             //处理文件选中的逻辑
-            List<BookShelfBean> list = AppReaderDbHelper.getInstance().getDatabase().getBookShelfDao().getByNoteUrl(hashMap.get("file").toString());
+            List<BookShelfBean> list = AppReaderDbHelper.getInstance().getDatabase().getBookShelfDao().getByNoteUrl(item.filePath);
             int size = list.size();
-            if (((File) hashMap.get(Constant.FileAttr.FILE)).isDirectory()) {
+            if (TextUtils.equals(item.fileType, Constant.FileAttr.DIRECTORY)) {
                 inflate.cbLocalCheck.setVisibility(View.GONE);
                 inflate.tvLocalImport.setVisibility(View.GONE);
             } else {
                 inflate.cbLocalCheck.setVisibility(size == 0 ? View.VISIBLE : View.GONE);
                 inflate.tvLocalImport.setVisibility(size == 0 ? View.GONE : View.VISIBLE);
-                inflate.cbLocalCheck.setChecked((boolean) hashMap.get(Constant.FileAttr.CHECKED));
+                inflate.cbLocalCheck.setChecked(item.isSelected);
             }
 
         }

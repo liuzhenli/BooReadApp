@@ -77,13 +77,13 @@ public class LocalTxtFragment extends BaseRVFragment<LocalTxtPresenter, LocalFil
         mAdapter.addAll(fileList);
     }
 
-    public List<File> getSelectedBooks() {
-        ArrayList<File> bookFiles = new ArrayList<>();
+    public List<LocalFileBean> getSelectedBooks() {
+        ArrayList<LocalFileBean> bookFiles = new ArrayList<>();
         List<LocalFileBean> data = mAdapter.getRealAllData();
         for (int i = 0; i < data.size(); i++) {
             LocalFileBean item = data.get(i);
             if (item.isSelected) {
-                bookFiles.add(item.file);
+                bookFiles.add(item);
             }
         }
         return bookFiles;

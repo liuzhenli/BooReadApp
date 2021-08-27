@@ -3,6 +3,7 @@ package com.liuzhenli.common.utils;
 import com.liuzhenli.common.BaseApplication;
 import com.liuzhenli.common.constant.AppConstant;
 
+import java.io.File;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -19,6 +20,10 @@ public class Constant extends AppConstant {
     public static final String REFER = "http://wan.baidu.com";
     public static final String FEEDBACK = "https://support.qq.com/product/186909";
 
+    public static File BASE_FOLDER = BaseApplication.getInstance().getExternalFilesDir(null) == null ?
+            BaseApplication.getInstance().getFilesDir() :
+            BaseApplication.getInstance().getExternalFilesDir(null);
+
     public static String CAPTURE_PATH = FileUtils.createRootPath(BaseApplication.getInstance()) + "/capture/";
 
     public static String PATH_DATA = FileUtils.createRootPath(BaseApplication.getInstance()) + "/data";
@@ -29,9 +34,10 @@ public class Constant extends AppConstant {
     public static String LOG_PATH = FileUtils.createRootPath(BaseApplication.getInstance()) + "/log/";
     public static String TTS_PATH = FileUtils.createRootPath(BaseApplication.getInstance()) + "/tts/";
     public static String WIFI_BOOK_PATH = FileUtils.createDownloadBookPath(BaseApplication.getInstance()) + "/wifiTransfer/";
+    public static final String LOCAL_BOOK_PATH = BASE_FOLDER + "/localBook/";
 
 
-    public static final String PERCENTL_STR = "%";
+    public static final String PERCENT_STR = "%";
     public static final String CHARSET_NAME = "UTF-8";
 
     @Retention(RetentionPolicy.SOURCE)
@@ -41,12 +47,13 @@ public class Constant extends AppConstant {
         String CHECKED = "checked";
         String SIZE = "size";
         String NAME = "name";
-        String ZERO = "directory";
+        String DIRECTORY = "directory";
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    public @interface Fileuffix {
-        String TET = ".txt";
+    public @interface FileSuffix {
+        String NONE = "directory";
+        String TXT = ".txt";
         String PDF = ".pdf";
         String EPUB = ".epub";
     }
@@ -62,4 +69,6 @@ public class Constant extends AppConstant {
     public static final String AES_KEY = "oBcnLkp6HcbO0l1QV";
     public static final String ATTACHMENT_SUFFIX_SERVER = ".jpg";
     public static final String ATTACHMENT_SUFFIX = ".t";
+
+    public static final String CONTENT_PREFIX = "content";
 }
